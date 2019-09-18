@@ -9,9 +9,9 @@ import GameScreen from './screens/GameScreen'
 import GameOverScreen from './screens/GameOverScreen'
 
 const fetchFonts = () => { //outside main app func b/c dont want it re-rendering all the time.
-  Font.loadAsync({ //pass this method an object where you tell it what fonts you want.
-    'open-sans': require('../assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('../assets/fonts/OpenSans-Bold.ttf')
+  return Font.loadAsync({ //pass this method an object where you tell it what fonts you want.
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
   });
 };
 
