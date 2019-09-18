@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 import Card from '../components/Card'
 import Input from '../components/Input'
@@ -13,6 +13,7 @@ const StartGameScreen = props => {
     const [enteredValue, setEnteredValue] = useState('');
     const [confirmed, setConfirmed] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState(); 
+    const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width / 4);
 
     //adding state and this method to validate that only two digit numbers are entered(bc android keyboardType cant do this).
     const numberInputHandler = inputText => {
@@ -23,6 +24,17 @@ const StartGameScreen = props => {
         setEnteredValue('');
         setConfirmed(false);
     };
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setButtonWidth(Dimensions.get('window').width / 4);
+        };
+    
+        Dimensions.addEventListener('change', updateLayout);  //listens for change in portrait v landscape.
+        return () => {  //clean up function removes event listener and runs before update function sets new orientation
+            Dimensions.removeEventListener('change', updateLayout);
+        };
+    });
 
     const confirmInputHandler = () => {
         const chosenNumber = parseInt(enteredValue); //convert text to number.
@@ -54,6 +66,8 @@ const StartGameScreen = props => {
     }
 
     return (
+        <ScrollView>
+        <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30} >
         <TouchableWithoutFeedback //use touchable so can listen to onPress outside of keyboard to dismiss it.
             onPress={() => {
                 Keyboard.dismiss();
@@ -73,10 +87,10 @@ const StartGameScreen = props => {
                     value={enteredValue}
                 />
                 <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
+                    <View style={{width: buttonWidth}}>
                         <Button title='Reset' onPress={resetInputHandler} color={Colors.accent} />
                     </View>
-                    <View style={styles.button}>
+                    <View style={{width: buttonWidth}}>
                         <Button title='Confirm' onPress={confirmInputHandler} color={Colors.primary} />
                     </View>
                 </View>
@@ -84,6 +98,8 @@ const StartGameScreen = props => {
             {confirmedOutput}
         </View>
         </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+        </ScrollView>
     );
 };
 
@@ -109,9 +125,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
     },
-    button: {
-        width: 100,
-    },
+    // button: {   //removed for dynamic change on screen orientation.
+    //     width: 100,
+    // },
     input: {
         width: 50,
         textAlign: 'center',

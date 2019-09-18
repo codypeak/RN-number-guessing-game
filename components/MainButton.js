@@ -1,18 +1,31 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform } from 'react-native';
 
 import Colors from '../constants/colors';
 
 //expect to get an event handler function forwarded as props to this component
 const MainButton = props => {
-    return <TouchableOpacity activeOpacity={0.6} onPress={props.onPress}>
-        <View style={styles.button}>
-            <Text style={styles.buttonText}>{props.children}</Text>
+    let ButtonComponent = TouchableOpacity;
+    if (Platform.OS === 'android' && Platform.Version >= 21) {
+        ButtonComponent = TouchableNativeFeedback;
+    }
+
+    return (
+        <View style={styles.buttonContainer}>
+            <ButtonComponent activeOpacity={0.6} onPress={props.onPress}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>{props.children}</Text>
+                </View>
+            </ButtonComponent>
         </View>
-    </TouchableOpacity>
+    )
 };
 
 const styles = StyleSheet.create({
+    buttonContainer: {  //need to add this container when use custom ButtonComponent to style border radius.
+        borderRadius: 25,
+        overflow: 'hidden',
+    },  
     button: {
         backgroundColor: Colors.primary,
         paddingVertical: 12,

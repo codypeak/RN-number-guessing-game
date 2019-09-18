@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo'; //prolongs splash screen launch, so a certain task is done, eg fetching fonts.
 
@@ -58,10 +58,10 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen}>
-      <Header title="Guess a Number" />
-      {content} 
-    </View> //render whatever is in content here. whichever screen depending if number is null or chosen. 
+    <SafeAreaView style={styles.screen}>
+        <Header title="Guess a Number" />
+        {content} 
+    </SafeAreaView> //render whatever is in content here. whichever screen depending if number is null or chosen. 
   );
 }
 
